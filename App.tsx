@@ -27,6 +27,7 @@ import {
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {Barcode, BarcodeFormat, scanBarcodes} from 'vision-camera-code-scanner';
+import calculateRotation from './src/utils/calculateRotation';
 
 const getPermission = async () => {
   const cameraPermission = await Camera.getCameraPermissionStatus();
@@ -67,7 +68,8 @@ const CameraComponent = () => {
   const frameProcessor = useFrameProcessor(frame => {
     'worklet';
     const detectedBarcodes = scanBarcodes(frame, [BarcodeFormat.QR_CODE]);
-    console.log(detectedBarcodes?.[0]?.content?.data);
+    console.log(detectedBarcodes?.[0]?.cornerPoints);
+    console.log(detectedBarcodes?.[0]?.content.type);
     runOnJS(setBarcodes)(detectedBarcodes);
   }, []);
   const devices = useCameraDevices();
@@ -87,7 +89,9 @@ const CameraComponent = () => {
       )}
       {barcodes.map((barcode, idx) => (
         <Text key={idx} style={styles.barcodeTextURL}>
-          {barcode.displayValue}
+          {`${barcode.displayValue} angle ${
+            barcode.cornerPoints && calculateRotation(barcode.cornerPoints)
+          }`}
         </Text>
       ))}
     </>
