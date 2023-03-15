@@ -18,7 +18,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import {runOnJS} from 'react-native-reanimated';
+import {runOnJS, useSharedValue} from 'react-native-reanimated';
 import {
   Camera,
   useCameraDevices,
@@ -26,8 +26,9 @@ import {
 } from 'react-native-vision-camera';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {Barcode, BarcodeFormat, scanBarcodes} from 'vision-camera-code-scanner';
+// import {Barcode, BarcodeFormat, scanBarcodes} from 'vision-camera-code-scanner';
 import calculateRotation from './src/utils/calculateRotation';
+import {detectBarcodes, DetectionResult} from 'vision-camera-plugin-zxing';
 
 const getPermission = async () => {
   const cameraPermission = await Camera.getCameraPermissionStatus();
@@ -49,7 +50,11 @@ const requestPermission = async () => {
 };
 const CameraComponent = () => {
   const [hasPermission, setHasPermission] = useState(false);
-  const [barcodes, setBarcodes] = useState<Barcode[]>([]);
+  // const [barcodes, setBarcodes] = useState<DetectionResult | null>();
+  const barcodes = useSharedValue<DetectionResult | null>(null);
+  const setBarcode = (value: DetectionResult) => {
+    barcodes.value = value;
+  };
   useEffect(() => {
     console.log('running');
     getPermission().then(res => {
@@ -67,10 +72,16 @@ const CameraComponent = () => {
   }, []);
   const frameProcessor = useFrameProcessor(frame => {
     'worklet';
-    const detectedBarcodes = scanBarcodes(frame, [BarcodeFormat.QR_CODE]);
-    console.log(detectedBarcodes?.[0]?.cornerPoints);
-    console.log(detectedBarcodes?.[0]?.content.type);
-    runOnJS(setBarcodes)(detectedBarcodes);
+    const value = detectBarcodes(frame, ['QRCode'], {
+      readMultiple: true,
+      readByQuadrant: true,
+    });
+    if (value) {
+      if (value.base64JPEG || value.barcodes.length > 0) {
+        console.log(value);
+      }
+      runOnJS(setBarcode)(value);
+    }
   }, []);
   const devices = useCameraDevices();
   const device = devices.back;
@@ -87,9 +98,9 @@ const CameraComponent = () => {
           frameProcessor={frameProcessor}
         />
       )}
-      {barcodes.map((barcode, idx) => (
+      {barcodes?.value?.barcodes?.map((barcode, idx) => (
         <Text key={idx} style={styles.barcodeTextURL}>
-          {`${barcode.displayValue} angle ${
+          {`${barcode.text} angle ${
             barcode.cornerPoints && calculateRotation(barcode.cornerPoints)
           }`}
         </Text>
