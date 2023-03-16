@@ -1,6 +1,6 @@
-import {Point} from 'vision-camera-code-scanner';
-
-export default function calculateRotation(points: Point[]): number {
+export default function calculateRotation(
+  points: Array<{x: number; y: number}>,
+): number {
   const a = points[1];
   const b = points[2];
   const z = Math.abs(a.x - b.x);
