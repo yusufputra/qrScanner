@@ -33,6 +33,7 @@ import {
   TextResult,
   initLicense,
 } from 'vision-camera-dynamsoft-barcode-reader';
+import getAnswer from './src/utils/answer';
 
 const getPermission = async () => {
   const cameraPermission = await Camera.getCameraPermissionStatus();
@@ -102,19 +103,20 @@ const CameraComponent = () => {
           frameProcessor={frameProcessor}
         />
       )}
-      {barcodes?.map((barcode, idx) => (
-        <Text key={idx} style={styles.barcodeTextURL}>
-          {`${barcode.barcodeText} angle ${
-            barcode &&
-            calculateRotation([
-              {x: barcode.x1, y: barcode.y1},
-              {x: barcode.x2, y: barcode.y2},
-              {x: barcode.x3, y: barcode.y3},
-              {x: barcode.x4, y: barcode.y4},
-            ])
-          }`}
-        </Text>
-      ))}
+      {barcodes?.map((barcode, idx) => {
+        const angle = calculateRotation([
+          {x: barcode.x1, y: barcode.y1},
+          {x: barcode.x2, y: barcode.y2},
+          {x: barcode.x3, y: barcode.y3},
+          {x: barcode.x4, y: barcode.y4},
+        ]);
+        const answer = getAnswer(angle);
+        return (
+          <Text key={idx} style={styles.barcodeTextURL}>
+            {`${barcode.barcodeText} angle ${angle} answer is ${answer}`}
+          </Text>
+        );
+      })}
     </>
   );
 };
