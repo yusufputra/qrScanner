@@ -2669,9 +2669,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.284:
-  version "1.4.330"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.330.tgz#4740378db7160d7210afb29800c74048cdf10a99"
-  integrity sha512-PqyefhybrVdjAJ45HaPLtuVaehiSw7C3ya0aad+rvmV53IVyXmYRk3pwIOb2TxTDTnmgQdn46NjMMaysx79/6Q==
+  version "1.4.331"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.331.tgz#c8ea823968563ef2cbb3495233e9e16c48c54a4a"
+  integrity sha512-tdtr9y9oJl8VDiS+HeB6e/JDJqdDGjIk3yRfEMHm5rDnWQ/D5SbafybAayInxolbfbH6pouV5g7ZUAwE/WVtHw==
 
 emittery@^0.7.1:
   version "0.7.2"
@@ -7015,15 +7015,10 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
-vision-camera-code-scanner@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/vision-camera-code-scanner/-/vision-camera-code-scanner-0.2.0.tgz#8adc0694319a17f6a95f6dfacc02ab7ac29b4742"
-  integrity sha512-H5hVkXfbIcGdg9YlhuS8Y/xDX5e32Vo6eK5FyDQsE9AGVjlqEHMmSLHZg7BX8UUm4ADmiAZc8wzc4n8TUqGr0g==
-
-vision-camera-plugin-zxing@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/vision-camera-plugin-zxing/-/vision-camera-plugin-zxing-0.1.1.tgz#28d53593a0bb6037d2586e51de5719059129fbdb"
-  integrity sha512-b7lMidDps/usdeY6zTwUpfocCTqLhJnvTchSZJ3sOvLNA9pcJkA2U9yM/AM2WufisV5E0t06DOKVUl7QgiGN4g==
+vision-camera-dynamsoft-barcode-reader@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/vision-camera-dynamsoft-barcode-reader/-/vision-camera-dynamsoft-barcode-reader-0.6.0.tgz#19eb32e407ddf18ae3b29edd414ac2c0a6509349"
+  integrity sha512-noJphbhZ/qRO4Pt3oUSVABmiTmTgBmmnkfyvU09Ppi3HaqghsZ1CpOOT3scBI0Sc9RIjLP8gm8kfYRUT7+cSXA==
 
 vlq@^1.0.0:
   version "1.0.1"
