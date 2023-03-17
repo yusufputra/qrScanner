@@ -7,6 +7,7 @@ import androidx.camera.core.ImageProxy;
 import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.EnumMap;
+import java.util.HashMap;
 
 import com.facebook.react.bridge.WritableNativeArray;
 import com.mrousavy.camera.frameprocessor.FrameProcessorPlugin;
@@ -26,6 +27,7 @@ import com.google.zxing.multi.GenericMultipleBarcodeReader;
 import com.google.zxing.multi.MultipleBarcodeReader;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.ResultPoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,15 +73,30 @@ public class ZxingFrameProcessorPlugin extends FrameProcessorPlugin {
     } catch (Exception e) {
         e.printStackTrace();
     }
-    WritableNativeArray resultArray = new WritableNativeArray();
+    List resultArray = new ArrayList<>();
     if (results != null) {
         for (Result result : results) {
-            WritableNativeArray resultData = new WritableNativeArray();
-            resultData.pushString(result.getBarcodeFormat().toString());
-            resultData.pushString(result.getText());
-
-            resultArray.pushArray(resultData);
+          if (result != null) {
+            // WritableNativeArray resultData = new WritableNativeArray();
+            Map<String, String> resultData = new HashMap<String, String>();
+            resultData.put("type",result.getBarcodeFormat().toString());
+            resultData.put("text",result.getText());
+        
+            ResultPoint[] points = result.getResultPoints();
+            if (points != null && points.length > 0) {
+              List pointData = new ArrayList();
+                for (ResultPoint point : points) {
+                    // WritableNativeArray xyData = new WritableNativeArray();
+                    Map<String, Integer> xyData = new HashMap<String, Integer>();
+                    xyData.put("x", (int) point.getX());
+                    xyData.put("y", (int) point.getY());
+                    pointData.add(xyData);
+                }
+                resultData.put("cornerPoints",pointData.toString());
+            }
+            resultArray.add(resultData);
         }
+      }
     }
     return resultArray;
   }
