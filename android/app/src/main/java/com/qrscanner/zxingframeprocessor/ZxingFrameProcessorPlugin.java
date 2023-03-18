@@ -74,17 +74,18 @@ public class ZxingFrameProcessorPlugin extends FrameProcessorPlugin {
         e.printStackTrace();
     }
     List resultArray = new ArrayList<>();
+    Map<String, Object> barcodeResponse = new HashMap<String, Object>();
     if (results != null) {
         for (Result result : results) {
           if (result != null) {
             // WritableNativeArray resultData = new WritableNativeArray();
-            Map<String, String> resultData = new HashMap<String, String>();
+            Map<String, Object> resultData = new HashMap<String, Object>();
             resultData.put("type",result.getBarcodeFormat().toString());
             resultData.put("text",result.getText());
         
             ResultPoint[] points = result.getResultPoints();
             if (points != null && points.length > 0) {
-              List pointData = new ArrayList();
+              List pointData = new ArrayList<>();
                 for (ResultPoint point : points) {
                     // WritableNativeArray xyData = new WritableNativeArray();
                     Map<String, Integer> xyData = new HashMap<String, Integer>();
@@ -92,13 +93,16 @@ public class ZxingFrameProcessorPlugin extends FrameProcessorPlugin {
                     xyData.put("y", (int) point.getY());
                     pointData.add(xyData);
                 }
-                resultData.put("cornerPoints",pointData.toString());
+                resultData.put("cornerPoints",pointData);
             }
             resultArray.add(resultData);
         }
       }
     }
-    return resultArray;
+    barcodeResponse.put("barcodes", resultArray);
+    barcodeResponse.put("width", width);
+    barcodeResponse.put("height",height);
+    return barcodeResponse;
   }
   private static Map<DecodeHintType, Object> getHints() {
     Map<DecodeHintType, Object> hints = new EnumMap<>(DecodeHintType.class);
