@@ -72,7 +72,7 @@ const CameraComponent = () => {
       readByQuadrant: true,
       readMultiple: true,
     });
-    console.log(value?.barcodes[0].cornerPoints);
+    console.log(value?.barcodes?.[0]?.cornerPoints);
     runOnJS(setBarcodes)(value);
   }, []);
   const devices = useCameraDevices();

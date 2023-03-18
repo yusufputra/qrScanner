@@ -78,7 +78,6 @@ public class ZxingFrameProcessorPlugin extends FrameProcessorPlugin {
     if (results != null) {
         for (Result result : results) {
           if (result != null) {
-            // WritableNativeArray resultData = new WritableNativeArray();
             Map<String, Object> resultData = new HashMap<String, Object>();
             resultData.put("type",result.getBarcodeFormat().toString());
             resultData.put("text",result.getText());
@@ -87,7 +86,6 @@ public class ZxingFrameProcessorPlugin extends FrameProcessorPlugin {
             if (points != null && points.length > 0) {
               List pointData = new ArrayList<>();
                 for (ResultPoint point : points) {
-                    // WritableNativeArray xyData = new WritableNativeArray();
                     Map<String, Integer> xyData = new HashMap<String, Integer>();
                     xyData.put("x", (int) point.getX());
                     xyData.put("y", (int) point.getY());
@@ -108,8 +106,6 @@ public class ZxingFrameProcessorPlugin extends FrameProcessorPlugin {
     Map<DecodeHintType, Object> hints = new EnumMap<>(DecodeHintType.class);
     List<BarcodeFormat> formats = new ArrayList<>();
     formats.add(BarcodeFormat.QR_CODE);
-    formats.add(BarcodeFormat.CODE_39);
-    formats.add(BarcodeFormat.CODE_128);
     hints.put(DecodeHintType.POSSIBLE_FORMATS, formats);
     hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
