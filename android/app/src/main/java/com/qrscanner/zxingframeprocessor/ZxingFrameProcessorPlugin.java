@@ -87,8 +87,8 @@ public class ZxingFrameProcessorPlugin extends FrameProcessorPlugin {
               List pointData = new ArrayList<>();
                 for (ResultPoint point : points) {
                     Map<String, Integer> xyData = new HashMap<String, Integer>();
-                    xyData.put("x", (int) point.getX());
-                    xyData.put("y", (int) point.getY());
+                    xyData.put("x", ((int) point.getX()));
+                    xyData.put("y", ((int) point.getY()));
                     pointData.add(xyData);
                 }
                 resultData.put("cornerPoints",pointData);
