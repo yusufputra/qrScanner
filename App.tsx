@@ -29,8 +29,6 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import calculateRotation from './src/utils/calculateRotation';
 import getAnswer from './src/utils/answer';
 import {detectBarcodes, DetectionResult} from 'vision-camera-plugin-zxing';
-import {Platform} from 'react-native';
-import {zxingDetectBarcodes} from './src/module/zxing';
 
 const getPermission = async () => {
   const cameraPermission = await Camera.getCameraPermissionStatus();
@@ -70,22 +68,12 @@ const CameraComponent = () => {
   }, []);
   const frameProcessor = useFrameProcessor(frame => {
     'worklet';
-    if (Platform.OS === 'ios') {
-      const value = detectBarcodes(frame, ['QRCode'], {
-        readByQuadrant: true,
-        readMultiple: true,
-      });
-      console.log('ios', value);
-      runOnJS(setBarcodes)(value);
-    }
-    if (Platform.OS === 'android') {
-      const value = zxingDetectBarcodes(frame, ['QRCode'], {
-        readByQuadrant: true,
-        readMultiple: true,
-      });
-      console.log('android', value);
-      runOnJS(setBarcodes)(value);
-    }
+    const value = detectBarcodes(frame, ['QRCode'], {
+      readByQuadrant: true,
+      readMultiple: true,
+    });
+    console.log(value?.barcodes[0].cornerPoints);
+    runOnJS(setBarcodes)(value);
   }, []);
   const devices = useCameraDevices();
   const device = devices.back;
