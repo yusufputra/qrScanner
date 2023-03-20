@@ -27,13 +27,8 @@ import {
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import calculateRotation from './src/utils/calculateRotation';
-import {
-  DBRConfig,
-  decode,
-  TextResult,
-  initLicense,
-} from 'vision-camera-dynamsoft-barcode-reader';
 import getAnswer from './src/utils/answer';
+import {detectBarcodes, DetectionResult} from 'vision-camera-plugin-zxing';
 
 const getPermission = async () => {
   const cameraPermission = await Camera.getCameraPermissionStatus();
@@ -55,14 +50,7 @@ const requestPermission = async () => {
 };
 const CameraComponent = () => {
   const [hasPermission, setHasPermission] = useState(false);
-  const [barcodes, setBarcodes] = useState<TextResult[]>();
-  useEffect(() => {
-    (async () => {
-      await initLicense(
-        'DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==',
-      );
-    })();
-  }, []);
+  const [barcodes, setBarcodes] = useState<DetectionResult | null>();
   useEffect(() => {
     console.log('running');
     getPermission().then(res => {
@@ -80,13 +68,12 @@ const CameraComponent = () => {
   }, []);
   const frameProcessor = useFrameProcessor(frame => {
     'worklet';
-    const config: DBRConfig = {};
-    config.template =
-      '{"ImageParameter":{"BarcodeFormatIds":["BF_QR_CODE"],"Description":"","Name":"Settings"},"Version":"3.0"}'; //scan qrcode only
-
-    const results: TextResult[] = decode(frame, config);
-    console.log(results);
-    runOnJS(setBarcodes)(results);
+    const value = detectBarcodes(frame, ['QRCode'], {
+      readByQuadrant: true,
+      readMultiple: true,
+    });
+    console.log(value?.barcodes?.[0]?.cornerPoints);
+    runOnJS(setBarcodes)(value);
   }, []);
   const devices = useCameraDevices();
   const device = devices.back;
@@ -103,17 +90,12 @@ const CameraComponent = () => {
           frameProcessor={frameProcessor}
         />
       )}
-      {barcodes?.map((barcode, idx) => {
-        const angle = calculateRotation([
-          {x: barcode.x1, y: barcode.y1},
-          {x: barcode.x2, y: barcode.y2},
-          {x: barcode.x3, y: barcode.y3},
-          {x: barcode.x4, y: barcode.y4},
-        ]);
+      {barcodes?.barcodes?.map((barcode, idx) => {
+        const angle = calculateRotation(barcode.cornerPoints);
         const answer = getAnswer(angle);
         return (
           <Text key={idx} style={styles.barcodeTextURL}>
-            {`${barcode.barcodeText} angle ${angle} answer is ${answer}`}
+            {`${barcode.text} angle ${angle} answer is ${answer}`}
           </Text>
         );
       })}
