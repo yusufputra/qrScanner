@@ -26,8 +26,8 @@ import {
 } from 'react-native-vision-camera';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import calculateRotation from './src/utils/calculateRotation';
-import getAnswer from './src/utils/answer';
+import calculateRotation from './utils/calculateRotation';
+import getAnswer from './utils/answer';
 import {detectBarcodes, DetectionResult} from 'vision-camera-plugin-zxing';
 
 const getPermission = async () => {
@@ -52,7 +52,6 @@ const CameraComponent = () => {
   const [hasPermission, setHasPermission] = useState(false);
   const [barcodes, setBarcodes] = useState<DetectionResult | null>();
   useEffect(() => {
-    console.log('running');
     getPermission().then(res => {
       if (
         res.cameraPermission === 'denied' ||
@@ -72,7 +71,6 @@ const CameraComponent = () => {
       readByQuadrant: true,
       readMultiple: true,
     });
-    console.log(value?.barcodes?.[0]?.cornerPoints);
     runOnJS(setBarcodes)(value);
   }, []);
   const devices = useCameraDevices();
