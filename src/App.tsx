@@ -67,7 +67,7 @@ const CameraComponent = () => {
   }, []);
   const frameProcessor = useFrameProcessor(frame => {
     'worklet';
-    const value = detectBarcodes(frame, ['QRCode'], {
+    const value = detectBarcodes(frame, ['QRCode', 'Aztec'], {
       readByQuadrant: true,
       readMultiple: true,
     });
