@@ -88,6 +88,11 @@ const CameraComponent = () => {
           frameProcessor={frameProcessor}
         />
       )}
+      {barcodes?.barcodes && (
+        <Text style={styles.barcodeTextURL}>
+          {` answer is ${barcodes.barcodes.length}`}
+        </Text>
+      )}
       {barcodes?.barcodes?.map((barcode, idx) => {
         const angle = calculateRotation(barcode.cornerPoints);
         const answer = getAnswer(angle);
