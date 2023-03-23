@@ -1,6 +1,7 @@
 package com.qrscanner.zxingframeprocessor;
 
 import androidx.camera.core.ImageProxy;
+import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.util.Map;
@@ -115,6 +116,7 @@ public class ZxingFrameProcessorPlugin extends FrameProcessorPlugin {
     for (int i = 0; i < barcodeTypeList.size(); i++) {
       formats.add(getBarcodeFormat(barcodeTypeList.getString(i)));
     }
+    Log.d("FORMATQR", formats.toString());
     hints.put(DecodeHintType.POSSIBLE_FORMATS, formats);
     hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
@@ -158,7 +160,7 @@ public class ZxingFrameProcessorPlugin extends FrameProcessorPlugin {
       case "UPCEANExtension":
         return BarcodeFormat.UPC_EAN_EXTENSION;
     }
-    return BarcodeFormat.QR_CODE;
+    return null;
   }
 
   public ZxingFrameProcessorPlugin() {
