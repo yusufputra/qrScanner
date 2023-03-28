@@ -86,6 +86,7 @@ const CameraComponent = () => {
           device={device}
           isActive={true}
           frameProcessor={frameProcessor}
+          orientation="portrait"
         />
       )}
       {barcodes?.barcodes && (
